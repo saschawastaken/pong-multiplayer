@@ -108,6 +108,11 @@ KEYBOARD_EVENTS = {
     pygame.K_DOWN: False
 }
 
+CLIENT_KEYBOARD_EVENTS = {
+    pygame.K_UP: False,
+    pygame.K_DOWN: False
+}
+
 SHOW_CALLS = {
     'MENU': MenuScene.show,
     'GAME': MainScene.show,
@@ -120,13 +125,15 @@ while True:
     handle_events()
 
     if NET_RULE == 'HOST':
-        socket.listen()
+        socket.recieve_movements()
 
     if NET_RULE == 'CLIENT':
-        socket.send_data(b'ich in eif dae geilschti siech.')
+        socket.send_movements(KEYBOARD_EVENTS)
 
     if PROGRAM_STATE == 'GAME':
         MainScene.handle_tile_movement(game_tile_a_index, SCREEN_SIZE, KEYBOARD_EVENTS)
+        #MainScene.handle_tile_movement(game_tile_b_index, SCREEN_SIZE, CLIENT_KEYBOARD_EVENTS)
+
         MainScene.handle_tile_movement(ball_tile_index, SCREEN_SIZE, KEYBOARD_EVENTS)
 
     update_surface(surface)
