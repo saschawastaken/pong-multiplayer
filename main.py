@@ -9,7 +9,7 @@ SCREEN_SIZE = (720, 360)
 FONTFILE = 'ARCADE_I.TTF'
 PROGRAM_STATE = 'MENU'
 TPS = 60
-NET_RULE = 'HOST' # CLIENT OR HOST
+NET_RULE = 'CLIENT' # CLIENT OR HOST
 
 pygame.init()
 pygame.display.init()
@@ -140,9 +140,11 @@ while True:
             MainScene.handle_tile_movement(ball_tile_index, SCREEN_SIZE, KEYBOARD_EVENTS)
 
         update_surface(surface)
+        
     except Exception as e:
             print(f"Error: {e}")
             break
     finally:
-        socket.client_socket.close()
+        if socket.client_socket:
+            socket.client_socket.close()
         socket.close()

@@ -7,7 +7,7 @@ class CustomSocket():
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-        self.client_socket = None
+        self.connection = None
         self.client_address = None
 
 
@@ -18,14 +18,14 @@ class CustomSocket():
         print(f"Server is listening on port {port}...")
 
         # Accept a client connection
-        self.client_socket, self.client_address = self.socket.accept()
+        self.connection, self.client_address = self.socket.accept()
 
         print(f"Connection established with {self.client_address}")
 
 
     def listen(self):
         # Receive and echo data
-        data = self.client_socket.recv(1024).decode('utf-8')
+        data = self.connection.recv(1024).decode('utf-8')
         
         if not data: return
 
@@ -46,7 +46,7 @@ class CustomSocket():
         global CLIENT_KEYBOARD_EVENTS
         
         # Receive and echo data
-        data = self.client_socket.recv(1024).decode('utf-8')
+        data = self.connection.recv(1024).decode('utf-8')
         
         if not data: return
 
