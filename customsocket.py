@@ -6,7 +6,8 @@ class CustomSocket():
         self.max_packet_size = 516
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+        
     def start_listening(self, port):
         self.socket.bind(('', port))
         self.socket.listen(1)
