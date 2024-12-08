@@ -140,11 +140,11 @@ while True:
             MainScene.handle_tile_movement(ball_tile_index, SCREEN_SIZE, KEYBOARD_EVENTS)
 
         update_surface(surface)
-        
+
     except Exception as e:
             print(f"Error: {e}")
             break
     finally:
-        if socket.client_socket:
-            socket.client_socket.close()
+        if socket.connection:
+            socket.connection.close()
         socket.close()
