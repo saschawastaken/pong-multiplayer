@@ -22,25 +22,13 @@ class CustomSocket():
 
         print(f"Connection established with {self.client_address}")
 
-
-    def listen(self):
-        # Receive and echo data
-        data = self.connection.recv(1024).decode('utf-8')
-        
-        if not data: return
-
-        print(f"Received from client: {data}")
-
     def connect(self, ip_address, port):
         self.socket.connect((ip_address, port))
         print(f"Connected to {ip_address}:{port}")
 
-    def send_data(self, data):
-        self.socket.sendall(data)
-
     def send_movements(self, keyboard_events):
         json_data = json.dumps(keyboard_events, indent = 4) .encode('utf-8')
-        self.socket.send(json_data)
+        self.socket.sendall(json_data)
 
     def recieve_movements(self):
         global CLIENT_KEYBOARD_EVENTS
