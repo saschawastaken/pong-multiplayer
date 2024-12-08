@@ -7,22 +7,25 @@ class CustomSocket():
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
-        
+        self.client_socket = None
+        self.client_address = None
+
+
     def start_listening(self, port):
         self.socket.bind(('', port))
         self.socket.listen(1)
         
         print(f"Server is listening on port {port}...")
 
-    def listen(self):
-        # Needs to be executed in the while loop.
-    
         # Accept a client connection
-        client_socket, client_address = self.socket.accept()
-        print(f"Connection established with {client_address}")
-        
+        self.client_socket, self.client_address = self.socket.accept()
+
+        print(f"Connection established with {self.client_address}")
+
+
+    def listen(self):
         # Receive and echo data
-        data = client_socket.recv(1024).decode('utf-8')
+        data = self.client_socket.recv(1024).decode('utf-8')
         
         if not data: return
 
@@ -33,7 +36,7 @@ class CustomSocket():
         print(f"Connected to {ip_address}:{port}")
 
     def send_data(self, data):
-        self.socket.send(data)
+        self.socket.sendall(data)
 
     def send_movements(self, keyboard_events):
         json_data = json.dumps(keyboard_events, indent = 4) .encode('utf-8')
@@ -41,17 +44,15 @@ class CustomSocket():
 
     def recieve_movements(self):
         global CLIENT_KEYBOARD_EVENTS
-        # Needs to be executed in the while loop.
-    
-        # Accept a client connection
-        client_socket, client_address = self.socket.accept()
-        print(f"Connection established with {client_address}")
         
         # Receive and echo data
-        data = client_socket.recv(1024).decode('utf-8')
+        data = self.client_socket.recv(1024).decode('utf-8')
         
         if not data: return
 
         print(f"Received from client: {data}")
 
         CLIENT_KEYBOARD_EVENTS = json.loads(data)
+    
+    def close(self):
+        self.socket.close()

@@ -9,7 +9,7 @@ SCREEN_SIZE = (720, 360)
 FONTFILE = 'ARCADE_I.TTF'
 PROGRAM_STATE = 'MENU'
 TPS = 60
-NET_RULE = 'CLIENT' # CLIENT OR HOST
+NET_RULE = 'HOST' # CLIENT OR HOST
 
 pygame.init()
 pygame.display.init()
@@ -19,6 +19,7 @@ clock = pygame.time.Clock()
 surface = pygame.display.set_mode(SCREEN_SIZE)
 
 socket = CustomSocket()
+
 if NET_RULE == 'HOST':
     socket.start_listening(8000)
 
@@ -120,20 +121,28 @@ SHOW_CALLS = {
 }
 
 while True:
-    
-    clock.tick(TPS)
-    handle_events()
 
-    if NET_RULE == 'HOST':
-        socket.recieve_movements()
+    try:
+        
+        clock.tick(TPS)
+        handle_events()
 
-    if NET_RULE == 'CLIENT':
-        socket.send_movements(KEYBOARD_EVENTS)
+        if NET_RULE == 'HOST':
+            socket.recieve_movements()
 
-    if PROGRAM_STATE == 'GAME':
-        MainScene.handle_tile_movement(game_tile_a_index, SCREEN_SIZE, KEYBOARD_EVENTS)
-        #MainScene.handle_tile_movement(game_tile_b_index, SCREEN_SIZE, CLIENT_KEYBOARD_EVENTS)
+        if NET_RULE == 'CLIENT':
+            socket.send_movements(KEYBOARD_EVENTS)
 
-        MainScene.handle_tile_movement(ball_tile_index, SCREEN_SIZE, KEYBOARD_EVENTS)
+        if PROGRAM_STATE == 'GAME':
+            MainScene.handle_tile_movement(game_tile_a_index, SCREEN_SIZE, KEYBOARD_EVENTS)
+            MainScene.handle_tile_movement(game_tile_b_index, SCREEN_SIZE, CLIENT_KEYBOARD_EVENTS)
 
-    update_surface(surface)
+            MainScene.handle_tile_movement(ball_tile_index, SCREEN_SIZE, KEYBOARD_EVENTS)
+
+        update_surface(surface)
+    except Exception as e:
+            print(f"Error: {e}")
+            break
+    finally:
+        socket.client_socket.close()
+        socket.close()
