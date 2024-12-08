@@ -53,4 +53,4 @@ class CustomSocket():
 
         print(f"Received from client: {data}")
 
-        CLIENT_KEYBOARD_EVENTS = json.loads(data.decode('utf-8'))
+        CLIENT_KEYBOARD_EVENTS = json.loads(data)
