@@ -9,7 +9,7 @@ SCREEN_SIZE = (720, 360)
 FONTFILE = 'ARCADE_I.TTF'
 PROGRAM_STATE = 'MENU'
 TPS = 60
-NET_RULE = 'CLIENT' # CLIENT OR HOST
+NET_RULE = 'HOST' # CLIENT OR HOST
 
 pygame.init()
 pygame.display.init()
@@ -128,7 +128,7 @@ while True:
         handle_events()
 
         if NET_RULE == 'HOST':
-            socket.recieve_movements()
+            socket.receive_movements()
 
         if NET_RULE == 'CLIENT':
             socket.send_movements(KEYBOARD_EVENTS)
