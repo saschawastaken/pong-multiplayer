@@ -9,6 +9,7 @@ SCREEN_SIZE = (720, 360)
 FONTFILE = 'ARCADE_I.TTF'
 PROGRAM_STATE = 'MENU'
 TPS = 60
+NET_RULE = 'CLIENT' # CLIENT OR HOST
 
 pygame.init()
 pygame.display.init()
@@ -17,8 +18,12 @@ pygame.display.set_caption('Ping Pong')
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode(SCREEN_SIZE)
 
-socket = CustomSocket('192.168.0.192', 8000)
+socket = CustomSocket()
+if NET_RULE == 'HOST':
+    socket.start_listening(8000)
 
+if NET_RULE == 'CLIENT':
+    socket.connect('192.168.0.192', 8000)
 
 def update_surface(surface):
     global BACKGROUND_COLOR, SHOW_CALLS, PROGRAM_STATE 
@@ -113,6 +118,12 @@ while True:
     
     clock.tick(TPS)
     handle_events()
+
+    if NET_RULE == 'HOST':
+        socket.listen()
+
+    if NET_RULE == 'CLIENT':
+        socket.send_data(b'ich in eif dae geilschti siech.')
 
     if PROGRAM_STATE == 'GAME':
         MainScene.handle_tile_movement(game_tile_a_index, SCREEN_SIZE, KEYBOARD_EVENTS)
