@@ -1,14 +1,16 @@
 import socket
 
+PORT = 8000
+
 def start_server():
     # Create a socket object
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
     # Bind to a local address and port
-    server_socket.bind(('localhost', 69420))
+    server_socket.bind(('', PORT))
     server_socket.listen(1)
     
-    print("Server is listening on port 69420...")
+    print(f"Server is listening on port {PORT}...")
     
     while True:
         # Accept a client connection
@@ -25,6 +27,10 @@ def start_server():
         # Close the connection
         client_socket.close()
         print("Connection closed")
+        quit(0)
 
 if __name__ == "__main__":
-    start_server()
+    try:
+        start_server()
+    except KeyboardInterrupt:
+        quit(0)

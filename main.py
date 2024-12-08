@@ -2,6 +2,7 @@ import socket
 import pygame
 from scene import Scene
 from GameScene import GameScene
+from customsocket import CustomSocket
 
 BACKGROUND_COLOR = (20, 20, 20)
 SCREEN_SIZE = (720, 360)
@@ -15,6 +16,9 @@ pygame.display.set_caption('Ping Pong')
 
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode(SCREEN_SIZE)
+
+socket = CustomSocket('192.168.0.192', 8000)
+
 
 def update_surface(surface):
     global BACKGROUND_COLOR, SHOW_CALLS, PROGRAM_STATE 
