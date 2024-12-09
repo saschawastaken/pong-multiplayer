@@ -126,10 +126,10 @@ while True:
         
         clock.tick(TPS)
         handle_events()
-
+        """
         if NET_RULE == 'HOST':
             socket.receive_movements()
-
+        """
         if NET_RULE == 'CLIENT':
             socket.send_movements(KEYBOARD_EVENTS)
 
